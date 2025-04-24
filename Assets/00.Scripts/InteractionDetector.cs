@@ -10,6 +10,8 @@ public class InteractionDetector : MonoBehaviour
     [SerializeField] private float activationDistance = 3.0f;
 
     private Dictionary<Transform, GameObject> activeIcons = new Dictionary<Transform, GameObject>();
+    private IInteractable currentInteractable;
+
     void Start()
     {
         iconPrefab.SetActive(false);
@@ -29,8 +31,20 @@ public class InteractionDetector : MonoBehaviour
                 Debug.LogWarning("Found Obj: " + targetTransform.name);
                 currentObjects.Add(targetTransform);
                 showIcon(targetTransform);
+
+                if (targetTransform.TryGetComponent(out IInteractable interactable))
+                {
+                    currentInteractable = interactable;
+                }
             }
         }
+
+        if (currentInteractable != null && Input.GetKeyDown(KeyCode.F))
+        {
+            currentInteractable.Interact(); 
+            currentInteractable = null;  
+        }
+
         UpdateIconPositions();
         RemoveInactiveIcons(currentObjects);
     }
@@ -57,6 +71,8 @@ public class InteractionDetector : MonoBehaviour
     {
         foreach (var pair in activeIcons)
         {
+            if (pair.Key == null) continue;
+          
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(GetIconPosition(pair.Key));
             pair.Value.transform.position = screenPosition;
         }
@@ -68,7 +84,7 @@ public class InteractionDetector : MonoBehaviour
 
         foreach (var pair in activeIcons)
         {
-            if (!stillActive.Contains(pair.Key))
+            if (!stillActive.Contains(pair.Key) || pair.Key == null)
             {
                 Destroy(pair.Value);
                 toRemove.Add(pair.Key);
