@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         Move();
-        //RotateToMouse();
+        RotateToMouse();
     }
 
     void Move()
