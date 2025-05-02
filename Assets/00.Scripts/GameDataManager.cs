@@ -6,6 +6,16 @@ using UnityEngine;
 
 public class GameDataManager : MonoBehaviour
 {
+    public static GameDataManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+
     private Dictionary<string, ItemData> itemDataDic = new();
     private Dictionary<string, ObjectData> objectDataDic = new();
     private Dictionary<string, RewardData> rewardDataDic = new();
@@ -25,8 +35,7 @@ public class GameDataManager : MonoBehaviour
 
         if (inventoryUI != null)
         {
-            inventoryUI.SetInventory(playerInventory);
-            inventoryUI.ShowInventory(playerInventory);
+            inventoryUI.ShowInventory();
         }
             
     }
@@ -122,17 +131,22 @@ public class GameDataManager : MonoBehaviour
 
             }
         }
-
         Debug.Log($"{objectName}¸¦ ÆÄ±«ÇÏ°í ¾ÆÀÌÅÛÀ» È¹µæÇÔ!");
+        inventoryUI?.ShowInventory();
     }
 
-    void PrintInventory()
+    public void AddItem(Item item, int count = 1)
     {
-        Debug.Log("ÀÎº¥Åä¸®:");
-        foreach (var item in playerInventory)
-        {
-            Debug.Log($"- {item.Name} ({item.ItemType}) x{item.Count}");
-        }
+        var existing = playerInventory.Find(i => i.Name == item.Name);
+        if (existing != null)
+            existing.Count += count;
+        else
+            playerInventory.Add(new Item
+            {
+                Name = item.Name,
+                ItemType = item.ItemType,
+                Count = count
+            });
     }
 }
 

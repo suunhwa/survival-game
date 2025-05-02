@@ -12,8 +12,9 @@ public class InventoryUI : MonoBehaviour
     public TextMeshProUGUI countText;
     public Button useBtn;
     public Button discardBtn;
-    public List<Item> playerInventory;
     public GameObject inventoryScreenUI;
+    public GameObject logPrefab;
+    public Transform dropPoint;
     
     private Item selectedItem;
 
@@ -21,6 +22,7 @@ public class InventoryUI : MonoBehaviour
     {
         inventoryScreenUI.SetActive(false);
     }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.I))
@@ -33,6 +35,9 @@ public class InventoryUI : MonoBehaviour
     {
         bool isActive = inventoryScreenUI.activeSelf;
         inventoryScreenUI.SetActive(!isActive);
+
+        if (!isActive)
+            ShowInventory();
     }
 
     public void CloseBtn()
@@ -40,15 +45,11 @@ public class InventoryUI : MonoBehaviour
         inventoryScreenUI.SetActive(false);
     }
 
-    public void SetInventory(List<Item> inventory)
-    {
-        playerInventory = inventory;
-    }
-
-    public void ShowInventory(List<Item> items)
+    public void ShowInventory()
     {
         ClearItemDetail();
 
+        List<Item> items = GameDataManager.Instance.playerInventory;
         int totalSlotCount = 14;
 
         foreach (Transform child in slotParent)
@@ -130,14 +131,14 @@ public class InventoryUI : MonoBehaviour
         descriptionText.text = item.ItemType; // 설명
         countText.text = $"x{item.Count}";
 
-        useBtn.gameObject.SetActive(true);
-        discardBtn.gameObject.SetActive(true);
-
         useBtn.onClick.RemoveAllListeners();
         discardBtn.onClick.RemoveAllListeners();
 
         useBtn.onClick.AddListener(UseItem);
         discardBtn.onClick.AddListener(DiscardItem);
+
+        useBtn.gameObject.SetActive(true);
+        discardBtn.gameObject.SetActive(true);
     }
 
     public void UseItem()
@@ -154,11 +155,14 @@ public class InventoryUI : MonoBehaviour
 
         if (selectedItem.Count <= 0)
         {
-            playerInventory.Remove(selectedItem);
-            ClearItemDetail(); 
+            GameDataManager.Instance.playerInventory.Remove(selectedItem);
+            ClearItemDetail();
         }
-
-        ShowInventory(playerInventory); 
+        else
+        {
+            ShowItemDetail(selectedItem);
+        }
+            GameDataManager.Instance.inventoryUI.ShowInventory();
     }
 
     public void DiscardItem()
@@ -169,12 +173,34 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        Debug.Log($"{selectedItem.Name} 버리기!");
+        GameObject prefabToDrop = logPrefab;
 
-        playerInventory.Remove(selectedItem);
+        Vector3 randomOffset = new Vector3(Random.Range(-2.5f, 2.5f), 0f, Random.Range(-2.5f, 2.5f));
+        Vector3 dropPos = dropPoint.position + transform.forward * 1.5f + randomOffset;
+        GameObject dropped = Instantiate(prefabToDrop, dropPos, Quaternion.identity);
 
-        ClearItemDetail(); 
-        ShowInventory(playerInventory); 
+        if (dropped.TryGetComponent(out DroppedItem drop))
+        {
+            drop.itemName = selectedItem.Name;
+            drop.itemType = selectedItem.ItemType;
+            drop.count = 1;
+        }
+
+        selectedItem.Count--;
+
+        Debug.Log($"{selectedItem.Name} 버림! 남은 수량: {selectedItem.Count}");
+
+        if (selectedItem.Count <= 0)
+        {
+            GameDataManager.Instance.playerInventory.Remove(selectedItem);
+            ClearItemDetail();
+        }
+        else
+        {
+            ShowItemDetail(selectedItem);
+        }
+
+        GameDataManager.Instance.inventoryUI.ShowInventory();
     }
 
 }
