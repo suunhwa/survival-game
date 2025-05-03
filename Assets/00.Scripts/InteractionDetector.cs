@@ -23,8 +23,12 @@ public class InteractionDetector : MonoBehaviour
 
         foreach (Collider collider in nearByObjects)
         {
+            Debug.Log("Collider hit: " + collider.name);
+
             Transform targetTransform = collider.transform;
-            float distance = Vector3.Distance(transform.position, targetTransform.position);
+
+            Vector3 closetPoint = collider.ClosestPoint(transform.position);
+            float distance = Vector3.Distance(transform.position, closetPoint);
 
             if (distance <= activationDistance)
             {

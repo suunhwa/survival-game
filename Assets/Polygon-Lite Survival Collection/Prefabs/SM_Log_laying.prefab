@@ -154,8 +154,6 @@ MonoBehaviour:
   itemName: Wood
   itemType: Material
   count: 1
-  uiCanvas: {fileID: 0}
-  iconPrefab: {fileID: 8898623355719268458, guid: 82409fb3f5e7fe940b7aec4cc4b43120, type: 3}
 --- !u!1 &7150309392311831355
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,5 +223,3 @@ MonoBehaviour:
   itemName: Wood
   itemType: Material
   count: 1
-  uiCanvas: {fileID: 0}
-  iconPrefab: {fileID: 8898623355719268458, guid: 82409fb3f5e7fe940b7aec4cc4b43120, type: 3}
