@@ -7,23 +7,17 @@ public class DroppedItem : MonoBehaviour
     public int count = 1;
 
     private bool isPlayerNear = false;
-
-    [SerializeField] private Canvas uiCanvas;
-    [SerializeField] private GameObject iconPrefab;
     private GameObject iconInstance;
 
-    private void Start()
+    public void Setup(string name, string type, int count, GameObject iconPrefab)
     {
-        uiCanvas = GameObject.Find("Canvas")?.GetComponent<Canvas>();
-        if (uiCanvas == null)
-        {
-            Debug.LogWarning("Canvas 찾을 수 없음!");
-            return;
-        }
+        this.itemName = name;
+        this.itemType = type;
+        this.count = count;
 
-        if (iconPrefab != null)
+        if (iconInstance == null && iconPrefab != null)
         {
-            iconInstance = Instantiate(iconPrefab, uiCanvas.transform);
+            iconInstance = Instantiate(iconPrefab, GameObject.Find("Canvas").transform);
             iconInstance.SetActive(false);
         }
     }
@@ -36,22 +30,28 @@ public class DroppedItem : MonoBehaviour
             {
                 Name = itemName,
                 ItemType = itemType,
-                Count = count,
+                Count = this.count,
             });
 
             GameDataManager.Instance.inventoryUI.ShowInventory();
-            Destroy(gameObject);
+
+            if (iconInstance != null)
+                Destroy(iconInstance);
+
+            ItemPoolManager.Instance.Return(this);
         }
 
         if (iconInstance != null)
         {
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 2.5f);
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 2.0f);
             iconInstance.transform.position = screenPos;
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("DroppedItem Trigger Enter: " + other.name);
+
         if (other.CompareTag("Player"))
         {
             isPlayerNear = true;
@@ -68,9 +68,9 @@ public class DroppedItem : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        if (iconInstance != null)
-            Destroy(iconInstance);
+        iconInstance?.SetActive(false);
+        isPlayerNear = false;
     }
 }

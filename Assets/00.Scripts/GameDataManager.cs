@@ -139,15 +139,13 @@ public class GameDataManager : MonoBehaviour
     {
         var existing = playerInventory.Find(i => i.Name == item.Name);
         if (existing != null)
-            existing.Count += count;
+            existing.Count += item.Count;
         else
             playerInventory.Add(new Item
             {
                 Name = item.Name,
                 ItemType = item.ItemType,
-                Count = count
+                Count = item.Count
             });
     }
 }
-
-

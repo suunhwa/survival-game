@@ -13,7 +13,6 @@ public class InventoryUI : MonoBehaviour
     public Button useBtn;
     public Button discardBtn;
     public GameObject inventoryScreenUI;
-    public GameObject logPrefab;
     public Transform dropPoint;
     
     private Item selectedItem;
@@ -173,22 +172,30 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        GameObject prefabToDrop = logPrefab;
+        int unitSize = selectedItem.Name == "Stone" ? 6 : 4;
+        int dropCount = Mathf.Min(unitSize, selectedItem.Count);
 
-        Vector3 randomOffset = new Vector3(Random.Range(-2.5f, 2.5f), 0f, Random.Range(-2.5f, 2.5f));
-        Vector3 dropPos = dropPoint.position + transform.forward * 1.5f + randomOffset;
-        GameObject dropped = Instantiate(prefabToDrop, dropPos, Quaternion.identity);
+        if (dropCount <= 0)
+            return;
 
-        if (dropped.TryGetComponent(out DroppedItem drop))
-        {
-            drop.itemName = selectedItem.Name;
-            drop.itemType = selectedItem.ItemType;
-            drop.count = 1;
-        }
+        int prefabCount = dropCount / unitSize;
 
-        selectedItem.Count--;
+        Vector3 offset = transform.right * Random.Range(-2f, 2f) + transform.forward * Random.Range(1f, 2f);
+        Vector3 dropPos = dropPoint.position + transform.forward * 1.5f + offset;
 
-        Debug.Log($"{selectedItem.Name} 버림! 남은 수량: {selectedItem.Count}");
+        var dropped = ItemPoolManager.Instance.Spawn(
+                selectedItem.Name,
+                selectedItem.ItemType,
+                unitSize,
+                dropPos
+            );
+
+        Debug.Log($"[Drop] 프리팹 → ID: {dropped.GetInstanceID()} / 위치: {dropPos}");
+
+
+        selectedItem.Count -= dropCount;
+
+        Debug.Log($"{selectedItem.Name} {dropCount}개 버림! 남은 수량: {selectedItem.Count}");
 
         if (selectedItem.Count <= 0)
         {
