@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: E
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 02b3a7326c8030b49b2f8e534530a051, type: 2}
-  m_sharedMaterial: {fileID: 5484151036188213349, guid: 02b3a7326c8030b49b2f8e534530a051, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2f04d8cd07d7d15489880c229dbe674b, type: 2}
+  m_sharedMaterial: {fileID: -3641182748111849647, guid: 2f04d8cd07d7d15489880c229dbe674b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2376367619605170362
@@ -201,10 +201,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press E key to pick up
+  m_text: "\uC90D\uAE30"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 02b3a7326c8030b49b2f8e534530a051, type: 2}
-  m_sharedMaterial: {fileID: 5484151036188213349, guid: 02b3a7326c8030b49b2f8e534530a051, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2f04d8cd07d7d15489880c229dbe674b, type: 2}
+  m_sharedMaterial: {fileID: -3641182748111849647, guid: 2f04d8cd07d7d15489880c229dbe674b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,9 +12,11 @@ public class InteractionDetector : MonoBehaviour
 
     private Dictionary<Transform, GameObject> activeIcons = new Dictionary<Transform, GameObject>();
     private IInteractable currentInteractable;
+    private Animator animator;
 
     void Start()
     {
+        animator = GetComponentInChildren<Animator>();
         iconPrefab.SetActive(false);
     }
     void Update()
@@ -45,13 +48,22 @@ public class InteractionDetector : MonoBehaviour
 
         if (currentInteractable != null && Input.GetKeyDown(KeyCode.F))
         {
-            currentInteractable.Interact(); 
-            currentInteractable = null;  
+            animator.SetBool("isMining", true);
+            animator.Play("SwingTool", 0, 0f);
+         
+            currentInteractable.Interact();
+        } 
+        
+        if (currentInteractable is MonoBehaviour mb && mb == null)
+        {
+            currentInteractable = null;
+            animator.SetBool("isMining", false);
         }
 
         UpdateIconPositions();
         RemoveInactiveIcons(currentObjects);
     }
+
     private Vector3 GetIconPosition(Transform target)
     {
         Transform iconPoint = target.Find("IconPoint");

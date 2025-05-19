@@ -1,9 +1,17 @@
+using System.Collections;
 using UnityEngine;
 
 public class TreeInteractable : MonoBehaviour, IInteractable
 {
     public void Interact()
     {
+        StartCoroutine(DestroyAfterDelay(3.5f));
+    }
+
+    private IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
         Vector3 pos = transform.position + Vector3.up * 0.5f;
 
         Vector3 randomOffset = new Vector3(
@@ -26,7 +34,6 @@ public class TreeInteractable : MonoBehaviour, IInteractable
 
         ItemPoolManager.Instance.Spawn("Apple", "Food", 1, spawnPos);
         Debug.Log("»ç°ú µå¶øµÊ!");
-
         Destroy(gameObject);
     }
 }

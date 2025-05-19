@@ -60,6 +60,8 @@ public class PlayerMovement : MonoBehaviour
         characterController.Move(finalMove * Time.deltaTime);
 
         float currentSpeed = moveXZ.magnitude;
+
+        Debug.Log("현재 speed 파라미터 값: " + currentSpeed);
         animator.SetFloat("speed", currentSpeed);
 
         if(moveDirection != Vector3.zero)

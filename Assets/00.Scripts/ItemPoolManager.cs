@@ -9,6 +9,7 @@ public class ItemPoolManager : MonoBehaviour
     [SerializeField] private DroppedItem woodPrefab;
     [SerializeField] private DroppedItem stonePrefab;
     [SerializeField] private DroppedItem applePrefab;
+    [SerializeField] private DroppedItem meatPrefab;
     [SerializeField] private GameObject iconPrefab;
 
     private Dictionary<string, ObjectPool<DroppedItem>> pools;
@@ -25,9 +26,10 @@ public class ItemPoolManager : MonoBehaviour
     {
         pools = new Dictionary<string, ObjectPool<DroppedItem>>
         {
-            {"Wood", new ObjectPool<DroppedItem> (woodPrefab, 20, droppedItemParent) },
-            {"Stone", new ObjectPool<DroppedItem> (stonePrefab, 20, droppedItemParent) },
-            {"Apple", new ObjectPool<DroppedItem> (applePrefab, 20, droppedItemParent) }
+            {"Wood", new ObjectPool<DroppedItem> (woodPrefab, 50, droppedItemParent) },
+            {"Stone", new ObjectPool<DroppedItem> (stonePrefab, 50, droppedItemParent) },
+            {"Apple", new ObjectPool<DroppedItem> (applePrefab, 20, droppedItemParent) },
+            {"Meat", new ObjectPool<DroppedItem> (meatPrefab, 20, droppedItemParent) }
         };
     }
 
