@@ -10,6 +10,8 @@ public class Monster : MonoBehaviour
     private Animator animator;
     private bool isDead = false;
 
+    public bool IsDead => isDead;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -22,6 +24,7 @@ public class Monster : MonoBehaviour
             return;
 
         currentHealth -= d;
+        animator.SetTrigger("Get Hit Front");
 
         if (currentHealth <= 0)
         {
