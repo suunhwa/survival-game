@@ -32,10 +32,14 @@ public class Monster : MonoBehaviour
         }
     }
 
-    private void Die()
+    public void Die()
     {
+        if (isDead)
+            return;
+
         isDead = true;
-        animator.SetTrigger("Death");
+
+        animator.SetBool("Death", true);
         Invoke(nameof(DropItem), 1.5f);
         Destroy(gameObject, 3f);
     }
